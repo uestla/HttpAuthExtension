@@ -33,8 +33,8 @@ class HttpAuthenticator extends Nette\Object
 	function run()
 	{
 		if ( !isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password ) {
-			$this->response->setHeader('WWW-Authenticate', 'Basic realm="Frontend authentication"');
-			$this->response->setCode( Nette\Http\IResponse::S401_UNAUTHORIZED );
+			$this->response->setHeader( 'WWW-Authenticate', 'Basic realm="Frontend authentication"' );
+			$this->response->setCode( Http\IResponse::S401_UNAUTHORIZED );
 			echo '<h1>Authentication failed.</h1>';
 			die();
 		}
