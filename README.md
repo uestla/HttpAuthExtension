@@ -10,7 +10,7 @@ HttpAuthExtension::register( $configurator );
 
 
 
-*config.neon:*
+**config.neon:**
 
 ```
 httpAuth:
