@@ -40,6 +40,7 @@ class HttpAuthenticator extends Nette\Object
 
 
 
+	/** @return void */
 	function run()
 	{
 		if ( !isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password ) {
