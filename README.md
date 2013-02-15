@@ -16,4 +16,5 @@ HttpAuthExtension::register( $configurator );
 httpAuth:
 	username: admin
 	password: ***
+	title: 'Frontend authentication' ; [optional]
 ```
