@@ -32,7 +32,7 @@ class HttpAuthExtension extends Nette\Config\CompilerExtension
 			$initialize = $class->methods['initialize'];
 
 			$initialize->addBody('$auth = new HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? );',
-					array($config['username'], $config['password']));
+					array($config['username'], $config['password'], $config['title']));
 			$initialize->addBody('$auth->run();');
 		}
 	}
