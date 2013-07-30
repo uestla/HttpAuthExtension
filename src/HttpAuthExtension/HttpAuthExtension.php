@@ -9,6 +9,8 @@
  * @link     https://github.com/uestla/HttpAuthExtension
  */
 
+namespace HttpAuthExtension;
+
 
 class HttpAuthExtension extends Nette\Config\CompilerExtension
 {

@@ -10,6 +10,8 @@
  */
 
 
+namespace HttpAuthExtension;
+
 use Nette\Http;
 
 
