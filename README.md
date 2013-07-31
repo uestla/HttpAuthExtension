@@ -13,7 +13,7 @@ Usage as simple as possible:
 
 **bootstrap.php**
 ```php
-HttpAuthExtension::register( $configurator );
+HttpAuthExtension\HttpAuthExtension::register( $configurator );
 ```
 
 
