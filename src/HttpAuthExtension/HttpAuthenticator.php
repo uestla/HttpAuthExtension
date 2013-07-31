@@ -9,51 +9,56 @@
  * @link     https://github.com/uestla/HttpAuthExtension
  */
 
+
 namespace HttpAuthExtension;
 
 use Nette;
+use Nette\Http;
 
 
-class HttpAuthExtension extends Nette\Config\CompilerExtension
+class HttpAuthenticator extends Nette\Object
 {
 
-	/** @var array */
-	public $defaults = array(
-		'title' => 'Frontend authentication',
-	);
+	/** @var Http\Response */
+	protected $response;
+
+	/** @var string */
+	protected $username;
+
+	/** @var string */
+	protected $password;
+
+	/** @var string */
+	protected $title;
 
 
 
 	/**
-	 * @param  Nette\Utils\PhpGenerator\ClassType
-	 * @return void
+	 * @param  Http\Response
+	 * @param  string
+	 * @param  string
+	 * @param  string
 	 */
-	function afterCompile(Nette\Utils\PhpGenerator\ClassType $class)
+	function __construct(Http\Response $response, $username, $password, $title)
 	{
-		$config = $this->getConfig($this->defaults);
-
-		if (isset($config['username'], $config['password'])) {
-			$initialize = $class->methods['initialize'];
-
-			$initialize->addBody('$auth = new HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? );',
-					array($config['username'], $config['password'], $config['title']));
-			$initialize->addBody('$auth->run();');
-		}
+		$this->response = $response;
+		$this->username = $username;
+		$this->password = $password;
+		$this->title = $title;
 	}
 
 
 
-	/**
-	 * @param  Nette\Config\Configurator
-	 * @param  string
-	 * @return void
-	 */
-	static function register(Nette\Config\Configurator $configurator, $prefix = 'httpAuth')
+	/** @return void */
+	function run()
 	{
-		$class = __CLASS__;
-		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {
-			$compiler->addExtension($prefix, new $class);
-		};
+		if (!isset($_SERVER['PHP_AUTH_USER'])
+				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password) {
+			$this->response->setHeader('WWW-Authenticate', 'Basic realm="' . $this->title . '"');
+			$this->response->setCode(Http\IResponse::S401_UNAUTHORIZED);
+			echo '<h1>Authentication failed.</h1>';
+			die();
+		}
 	}
 
 }

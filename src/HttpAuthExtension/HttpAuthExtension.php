@@ -9,56 +9,51 @@
  * @link     https://github.com/uestla/HttpAuthExtension
  */
 
-
 namespace HttpAuthExtension;
 
 use Nette;
-use Nette\Http;
 
 
-class HttpAuthenticator extends Nette\Object
+class HttpAuthExtension extends Nette\Config\CompilerExtension
 {
 
-	/** @var Http\Response */
-	protected $response;
-
-	/** @var string */
-	protected $username;
-
-	/** @var string */
-	protected $password;
-
-	/** @var string */
-	protected $title;
+	/** @var array */
+	public $defaults = array(
+		'title' => 'Frontend authentication',
+	);
 
 
 
 	/**
-	 * @param  Http\Response
-	 * @param  string
-	 * @param  string
-	 * @param  string
+	 * @param  Nette\Utils\PhpGenerator\ClassType
+	 * @return void
 	 */
-	function __construct(Http\Response $response, $username, $password, $title)
+	function afterCompile(Nette\Utils\PhpGenerator\ClassType $class)
 	{
-		$this->response = $response;
-		$this->username = $username;
-		$this->password = $password;
-		$this->title = $title;
+		$config = $this->getConfig($this->defaults);
+
+		if (isset($config['username'], $config['password'])) {
+			$initialize = $class->methods['initialize'];
+
+			$initialize->addBody('$auth = new HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? );',
+					array($config['username'], $config['password'], $config['title']));
+			$initialize->addBody('$auth->run();');
+		}
 	}
 
 
 
-	/** @return void */
-	function run()
+	/**
+	 * @param  Nette\Config\Configurator
+	 * @param  string
+	 * @return void
+	 */
+	static function register(Nette\Config\Configurator $configurator, $prefix = 'httpAuth')
 	{
-		if (!isset($_SERVER['PHP_AUTH_USER'])
-				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password) {
-			$this->response->setHeader('WWW-Authenticate', 'Basic realm="' . $this->title . '"');
-			$this->response->setCode(Http\IResponse::S401_UNAUTHORIZED);
-			echo '<h1>Authentication failed.</h1>';
-			die();
-		}
+		$class = __CLASS__;
+		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {
+			$compiler->addExtension($prefix, new $class);
+		};
 	}
 
 }
