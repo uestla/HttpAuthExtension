@@ -14,7 +14,7 @@ namespace HttpAuthExtension;
 use Nette;
 
 
-class HttpAuthExtension extends Nette\Config\CompilerExtension
+class HttpAuthExtension extends Nette\DI\CompilerExtension
 {
 
 	/** @var array */
