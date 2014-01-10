@@ -14,7 +14,7 @@ namespace HttpAuthExtension;
 use Nette;
 
 
-class HttpAuthExtension extends Nette\Config\CompilerExtension
+class HttpAuthExtension extends Nette\DI\CompilerExtension
 {
 
 	/** @var array */
@@ -25,10 +25,10 @@ class HttpAuthExtension extends Nette\Config\CompilerExtension
 
 
 	/**
-	 * @param  Nette\Utils\PhpGenerator\ClassType
+	 * @param  Nette\PhpGenerator\ClassType $class
 	 * @return void
 	 */
-	function afterCompile(Nette\Utils\PhpGenerator\ClassType $class)
+	function afterCompile(Nette\PhpGenerator\ClassType $class)
 	{
 		$config = $this->getConfig($this->defaults);
 
@@ -44,11 +44,11 @@ class HttpAuthExtension extends Nette\Config\CompilerExtension
 
 
 	/**
-	 * @param  Nette\Config\Configurator
-	 * @param  string
+	 * @param  Nette\Configurator $configurator
+	 * @param  string $prefix
 	 * @return void
 	 */
-	static function register(Nette\Config\Configurator $configurator, $prefix = 'httpAuth')
+	static function register(Nette\Configurator $configurator, $prefix = 'httpAuth')
 	{
 		$class = __CLASS__;
 		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {

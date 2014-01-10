@@ -9,7 +9,6 @@
  * @link     https://github.com/uestla/HttpAuthExtension
  */
 
-
 namespace HttpAuthExtension;
 
 use Nette;
@@ -20,24 +19,24 @@ class HttpAuthenticator extends Nette\Object
 {
 
 	/** @var Http\Response */
-	protected $response;
+	private $response;
 
 	/** @var string */
-	protected $username;
+	private $username;
 
 	/** @var string */
-	protected $password;
+	private $password;
 
 	/** @var string */
-	protected $title;
+	private $title;
 
 
 
 	/**
-	 * @param  Http\Response
-	 * @param  string
-	 * @param  string
-	 * @param  string
+	 * @param  Http\Response $response
+	 * @param  string $username
+	 * @param  string $password
+	 * @param  string $title
 	 */
 	function __construct(Http\Response $response, $username, $password, $title)
 	{
