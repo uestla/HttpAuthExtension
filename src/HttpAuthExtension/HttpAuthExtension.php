@@ -23,7 +23,6 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	);
 
 
-
 	/**
 	 * @param  Nette\PhpGenerator\ClassType $class
 	 * @return void
@@ -40,7 +39,6 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 			$initialize->addBody('$auth->run();');
 		}
 	}
-
 
 
 	/**

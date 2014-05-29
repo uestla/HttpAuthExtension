@@ -31,7 +31,6 @@ class HttpAuthenticator extends Nette\Object
 	private $title;
 
 
-
 	/**
 	 * @param  Http\Response $response
 	 * @param  string $username
@@ -45,7 +44,6 @@ class HttpAuthenticator extends Nette\Object
 		$this->password = $password;
 		$this->title = $title;
 	}
-
 
 
 	/** @return void */
