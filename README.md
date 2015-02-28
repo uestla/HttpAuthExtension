@@ -11,16 +11,12 @@ composer require "uestla/http-auth-extension":"*"
 
 Usage as simple as possible:
 
-**bootstrap.php**
-```php
-HttpAuthExtension\HttpAuthExtension::register( $configurator );
-```
-
-
-
 **config.neon:**
 
 ```
+extensions:
+	httpAuth: HttpAuthExtension\HttpAuthExtension
+
 httpAuth:
 	username: admin
 	password: ***
