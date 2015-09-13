@@ -37,7 +37,7 @@ class HttpAuthenticator extends Nette\Object
 	 * @param  string $password
 	 * @param  string $title
 	 */
-	function __construct(Http\Response $response, $username, $password, $title)
+	public function __construct(Http\Response $response, $username, $password, $title)
 	{
 		$this->response = $response;
 		$this->username = $username;
@@ -47,7 +47,7 @@ class HttpAuthenticator extends Nette\Object
 
 
 	/** @return void */
-	function run()
+	public function run()
 	{
 		if (!isset($_SERVER['PHP_AUTH_USER'])
 				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password) {

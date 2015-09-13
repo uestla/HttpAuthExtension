@@ -27,7 +27,7 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	 * @param  Nette\PhpGenerator\ClassType $class
 	 * @return void
 	 */
-	function afterCompile(Nette\PhpGenerator\ClassType $class)
+	public function afterCompile(Nette\PhpGenerator\ClassType $class)
 	{
 		$config = $this->getConfig($this->defaults);
 
@@ -36,6 +36,7 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 
 			$initialize->addBody('$auth = new HttpAuthExtension\HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? );',
 					array($config['username'], $config['password'], $config['title']));
+
 			$initialize->addBody('$auth->run();');
 		}
 	}
@@ -46,7 +47,7 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	 * @param  string $prefix
 	 * @return void
 	 */
-	static function register(Nette\Configurator $configurator, $prefix = 'httpAuth')
+	public static function register(Nette\Configurator $configurator, $prefix = 'httpAuth')
 	{
 		$class = __CLASS__;
 		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {
