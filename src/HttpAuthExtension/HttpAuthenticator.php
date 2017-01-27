@@ -3,9 +3,8 @@
 /**
  * This file is part of the HttpAuthExtension package
  *
- * Copyright (c) 2013, 2014 Petr Kessler (http://kesspess.1991.cz)
- *
  * @license  MIT
+ * @author   Petr Kessler (https://kesspess.cz)
  * @link     https://github.com/uestla/HttpAuthExtension
  */
 
