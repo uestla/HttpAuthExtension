@@ -12,6 +12,7 @@ namespace HttpAuthExtension;
 
 use Nette;
 use Nette\Http;
+use Nette\Security;
 
 
 class HttpAuthenticator extends Nette\Object
@@ -49,7 +50,7 @@ class HttpAuthenticator extends Nette\Object
 	public function run()
 	{
 		if (!isset($_SERVER['PHP_AUTH_USER'])
-				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password) {
+				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || Security\Passwords::verify($_SERVER['PHP_AUTH_PW'], $this->password) === FALSE) {
 			$this->response->setHeader('WWW-Authenticate', 'Basic realm="' . $this->title . '"');
 			$this->response->setCode(Http\IResponse::S401_UNAUTHORIZED);
 			echo '<h1>Authentication failed.</h1>';
