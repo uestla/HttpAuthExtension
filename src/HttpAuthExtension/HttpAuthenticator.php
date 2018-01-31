@@ -16,7 +16,7 @@ use Nette\Http;
 class HttpAuthenticator
 {
 
-	/** @var Http\Response */
+	/** @var Http\IResponse */
 	private $response;
 
 	/** @var string */
@@ -30,12 +30,12 @@ class HttpAuthenticator
 
 
 	/**
-	 * @param  Http\Response $response
+	 * @param  Http\IResponse $response
 	 * @param  string $username
 	 * @param  string $password
 	 * @param  string $title
 	 */
-	public function __construct(Http\Response $response, $username, $password, $title)
+	public function __construct(Http\IResponse $response, $username, $password, $title)
 	{
 		$this->response = $response;
 		$this->username = $username;
