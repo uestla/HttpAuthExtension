@@ -1,16 +1,15 @@
-
 {
 	"name": "uestla/http-auth-extension",
 	"type": "library",
 	"description": "Simple frontend HTTP Authenticator extension for Nette Framework",
-	"keywords": ["nette", "orm", "database"],
+	"keywords": ["nette", "HTTP Authenticator"],
 	"homepage": "http://github.com/uestla/HttpAuthExtension",
 	"license": "MIT",
 	"support": {
 		"issues": "http://github.com/uestla/HttpAuthExtension/issues"
 	},
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">=5.6.0",
 		"nette/di": "~2.3",
 		"nette/http": "~2.3"
 	},
