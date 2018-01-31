@@ -19,6 +19,7 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	/** @var array */
 	private $defaults = array(
 		'title' => 'Frontend authentication',
+		'enable' => true,
 	);
 
 
@@ -29,6 +30,10 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	public function afterCompile(Nette\PhpGenerator\ClassType $class)
 	{
 		$config = $this->getConfig($this->defaults);
+
+		if (!$config['enable']) {
+			return;
+		}
 
 		if (isset($config['username'], $config['password'])) {
 			$initialize = $class->getMethod('initialize');
