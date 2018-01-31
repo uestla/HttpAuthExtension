@@ -38,9 +38,12 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 		if (isset($config['username'], $config['password'])) {
 			$initialize = $class->getMethod('initialize');
 
+			$initialize->addBody('if (php_sapi_name() === \'cli\') {');
+
 			$initialize->addBody('(new ' . HttpAuthenticator::class . '( $this->getByType(\'' . Nette\Http\IResponse::class . '\'), ?, ?, ? ))->run();',
 				[$config['username'], $config['password'], $config['title']]);
 
+			$initialize->addBody('}');
 		}
 	}
 
