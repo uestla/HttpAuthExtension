@@ -10,11 +10,10 @@
 
 namespace HttpAuthExtension;
 
-use Nette;
 use Nette\Http;
 
 
-class HttpAuthenticator extends Nette\Object
+class HttpAuthenticator
 {
 
 	/** @var Http\Response */
