@@ -47,18 +47,4 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 		}
 	}
 
-
-	/**
-	 * @param  Nette\Configurator $configurator
-	 * @param  string $prefix
-	 * @return void
-	 */
-	public static function register(Nette\Configurator $configurator, $prefix = 'httpAuth')
-	{
-		$class = __CLASS__;
-		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {
-			$compiler->addExtension($prefix, new $class);
-		};
-	}
-
 }
