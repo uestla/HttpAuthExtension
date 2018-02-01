@@ -15,8 +15,9 @@ use Nette\Http;
 use Nette\Security;
 
 
-class HttpAuthenticator extends Nette\Object
+class HttpAuthenticator
 {
+	use Nette\SmartObject;
 
 	/** @var Http\IResponse */
 	private $response;
