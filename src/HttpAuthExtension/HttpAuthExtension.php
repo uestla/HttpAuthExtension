@@ -21,6 +21,15 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 		'title' => 'Frontend authentication',
 	);
 
+	/** @var bool */
+	private $consoleMode;
+
+
+	public function __construct($consoleMode)
+	{
+		$this->consoleMode = $consoleMode;
+	}
+
 
 	/**
 	 * @param  Nette\PhpGenerator\ClassType $class
@@ -30,7 +39,7 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	{
 		$config = $this->getConfig($this->defaults);
 
-		if (isset($config['username'], $config['password'])) {
+		if (!$this->consoleMode && isset($config['username'], $config['password'])) {
 			$initialize = $class->methods['initialize'];
 
 			$initialize->addBody('(new HttpAuthExtension\HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? ))->run();',
