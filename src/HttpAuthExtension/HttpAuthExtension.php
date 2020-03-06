@@ -17,7 +17,7 @@ use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
 
 
-class HttpAuthExtension extends CompilerExtension
+final class HttpAuthExtension extends CompilerExtension
 {
 
 	public function __construct()
@@ -53,6 +53,7 @@ class HttpAuthExtension extends CompilerExtension
 	public static function register(Configurator $configurator, string $prefix = 'httpAuth'): void
 	{
 		$class = __CLASS__;
+
 		$configurator->onCompile[] = static function ($configurator, $compiler) use ($prefix, $class): void {
 			$compiler->addExtension($prefix, new $class);
 		};
