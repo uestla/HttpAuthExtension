@@ -10,18 +10,11 @@
 
 namespace HttpAuthExtension;
 
-use Nette;
 use Nette\Http;
 use Nette\Security;
 
-
 class HttpAuthenticator
 {
-	use Nette\SmartObject;
-
-	/** @var Http\IResponse */
-	private $response;
-
 	/** @var string */
 	private $username;
 
@@ -31,31 +24,36 @@ class HttpAuthenticator
 	/** @var string */
 	private $title;
 
+	/** @var Http\IResponse */
+	private $response;
 
-	/**
-	 * @param  Http\IResponse $response
-	 * @param  string $username
-	 * @param  string $password
-	 * @param  string $title
-	 */
-	public function __construct(Http\IResponse $response, $username, $password, $title)
+	/** @var Security\Passwords */
+	private $securityPassword;
+
+
+	public function __construct(
+		string $username,
+		string $password,
+		string $title,
+		Http\IResponse $response,
+		Security\Passwords $securityPassword
+	)
 	{
-		$this->response = $response;
 		$this->username = $username;
 		$this->password = $password;
 		$this->title = $title;
+		$this->response = $response;
+		$this->securityPassword = $securityPassword;
 	}
 
 
-	/** @return void */
-	public function run()
+	public function run(): void
 	{
 		if (!isset($_SERVER['PHP_AUTH_USER'])
-				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || Security\Passwords::verify($_SERVER['PHP_AUTH_PW'], $this->password) === FALSE) {
+				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || $this->securityPassword->verify($_SERVER['PHP_AUTH_PW'], $this->password) === FALSE) {
 			$this->response->setHeader('WWW-Authenticate', 'Basic realm="' . $this->title . '"');
 			$this->response->setCode(Http\IResponse::S401_UNAUTHORIZED);
-			echo '<h1>Authentication failed.</h1>';
-			die();
+			die('<h1>Authentication failed.</h1>');
 		}
 	}
 

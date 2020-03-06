@@ -11,54 +11,61 @@
 namespace HttpAuthExtension;
 
 use Nette;
+use Nette\DI;
+use Nette\Schema;
 
-
-class HttpAuthExtension extends Nette\DI\CompilerExtension
+class HttpAuthExtension extends DI\CompilerExtension
 {
-
-	/** @var array */
-	public $defaults = array(
-		'title' => 'Frontend authentication',
-	);
+	private const SERVICE_NAME_AUTHENTICATOR = 'httpAuthenticator';
 
 	/** @var bool */
 	private $consoleMode;
 
+	/** @var bool */
+	private $isAuthenticationAvailable;
 
-	public function __construct($consoleMode)
+
+	public function __construct(bool $consoleMode)
 	{
 		$this->consoleMode = $consoleMode;
 	}
 
 
-	/**
-	 * @param  Nette\PhpGenerator\ClassType $class
-	 * @return void
-	 */
-	public function afterCompile(Nette\PhpGenerator\ClassType $class)
+	public function loadConfiguration()
 	{
-		$config = $this->getConfig($this->defaults);
-
-		if (!$this->consoleMode && isset($config['username'], $config['password'])) {
-			$initialize = $class->methods['initialize'];
-
-			$initialize->addBody('(new HttpAuthExtension\HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? ))->run();',
-					array($config['username'], $config['password'], $config['title']));
+		$this->isAuthenticationAvailable = !$this->consoleMode && isset($this->config->username, $this->config->password);
+		if ($this->isAuthenticationAvailable) {
+			$this->buildHttpAuthenticator($this->config->username, $this->config->password, $this->config->title);
 		}
 	}
 
 
-	/**
-	 * @param  Nette\Configurator $configurator
-	 * @param  string $prefix
-	 * @return void
-	 */
-	public static function register(Nette\Configurator $configurator, $prefix = 'httpAuth')
+	public function getConfigSchema(): Schema\Schema
 	{
-		$class = __CLASS__;
-		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {
-			$compiler->addExtension($prefix, new $class);
-		};
+		return Schema\Expect::structure([
+			'title' => Schema\Expect::string('Frontend authentication'),
+			'username' => Schema\Expect::string(),
+			'password' => Schema\Expect::string(),
+		]);
+	}
+
+
+	public function afterCompile(Nette\PhpGenerator\ClassType $class)
+	{
+		if ($this->isAuthenticationAvailable) {
+			$initialize = $class->getMethods()['initialize'];
+			$initialize->addBody('$this->getService(?)->run();', [$this->prefix(self::SERVICE_NAME_AUTHENTICATOR)]);
+		}
+	}
+
+
+	private function buildHttpAuthenticator(string $username, string $password, string $title): void
+	{
+		$builder = $this->getContainerBuilder();
+		$builder->addDefinition($this->prefix(self::SERVICE_NAME_AUTHENTICATOR))
+			->setFactory(HttpAuthenticator::class)
+			->setArguments([$username, $password, $title])
+			->setAutowired(FALSE);
 	}
 
 }
