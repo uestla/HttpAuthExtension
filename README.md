@@ -1,15 +1,13 @@
-HttpAuthExtension
-=================
+# HttpAuthExtension
 
-Installation:
+## Installation:
 
 ```
-composer require "uestla/http-auth-extension":"*"
+composer require uestla/http-auth-extension
 ```
 
 
-
-Usage as simple as possible:
+## Configuration:
 
 **config.neon:**
 
@@ -18,7 +16,7 @@ extensions:
 	httpAuth: HttpAuthExtension\HttpAuthExtension
 
 httpAuth:
-	username: admin
-	password: ***
+	username: 'admin'
+	password: '***'
 	title: 'Frontend authentication' # [optional]
 ```
