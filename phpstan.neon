@@ -1,0 +1,8 @@
+parameters:
+	level: max
+	paths:
+		- src/
+	fileExtensions:
+		- php
+	autoload_directories:
+		- src
