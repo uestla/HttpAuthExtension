@@ -11,8 +11,9 @@
 	},
 	"require": {
 		"php": ">= 7.3",
-		"nette/di": "~2.3",
-		"nette/http": "~2.3"
+		"nette/bootstrap": "^3.0",
+		"nette/di": "^3.0",
+		"nette/http": "^3.0"
 	},
 	"autoload": {
 		"psr-0": {

@@ -12,34 +12,45 @@ declare(strict_types = 1);
 
 namespace HttpAuthExtension;
 
-use Nette;
+use Nette\Configurator;
+use Nette\DI\CompilerExtension;
+use Nette\PhpGenerator\ClassType;
 
 
-class HttpAuthExtension extends Nette\DI\CompilerExtension
+class HttpAuthExtension extends CompilerExtension
 {
 
-	/** @var array */
-	public $defaults = array(
-		'title' => 'Frontend authentication',
-	);
-
-
-	public function afterCompile(Nette\PhpGenerator\ClassType $class): void
+	public function __construct()
 	{
-		$config = $this->getConfig($this->defaults);
+		$this->config = new class {
+			/** @var string */
+			public $title = 'Frontend authentication';
 
-		if (isset($config['username'], $config['password'])) {
+			/** @var string|null */
+			public $username;
+
+			/** @var string|null */
+			public $password;
+		};
+	}
+
+
+	public function afterCompile(ClassType $class): void
+	{
+		$config = $this->config;
+
+		if (isset($config->username, $config->password, $config->title)) {
 			$initialize = $class->methods['initialize'];
 
 			$initialize->addBody('$auth = new HttpAuthExtension\HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? );',
-					array($config['username'], $config['password'], $config['title']));
+					[$config->username, $config->password, $config->title]);
 
 			$initialize->addBody('$auth->run();');
 		}
 	}
 
 
-	public static function register(Nette\Configurator $configurator, string $prefix = 'httpAuth'): void
+	public static function register(Configurator $configurator, string $prefix = 'httpAuth'): void
 	{
 		$class = __CLASS__;
 		$configurator->onCompile[] = static function ($configurator, $compiler) use ($prefix, $class): void {
