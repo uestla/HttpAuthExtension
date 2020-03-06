@@ -10,7 +10,7 @@
 		"issues": "http://github.com/uestla/HttpAuthExtension/issues"
 	},
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">= 7.3",
 		"nette/di": "~2.3",
 		"nette/http": "~2.3"
 	},

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the HttpAuthExtension package
  *
@@ -30,13 +32,7 @@ class HttpAuthenticator extends Nette\Object
 	private $title;
 
 
-	/**
-	 * @param  Http\Response $response
-	 * @param  string $username
-	 * @param  string $password
-	 * @param  string $title
-	 */
-	public function __construct(Http\Response $response, $username, $password, $title)
+	public function __construct(Http\Response $response, string $username, string $password, string $title)
 	{
 		$this->response = $response;
 		$this->username = $username;
@@ -45,11 +41,9 @@ class HttpAuthenticator extends Nette\Object
 	}
 
 
-	/** @return void */
-	public function run()
+	public function run(): void
 	{
-		if (!isset($_SERVER['PHP_AUTH_USER'])
-				|| $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password) {
+		if (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER'] !== $this->username || $_SERVER['PHP_AUTH_PW'] !== $this->password) {
 			$this->response->setHeader('WWW-Authenticate', 'Basic realm="' . $this->title . '"');
 			$this->response->setCode(Http\IResponse::S401_UNAUTHORIZED);
 			echo '<h1>Authentication failed.</h1>';

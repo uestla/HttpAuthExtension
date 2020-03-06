@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the HttpAuthExtension package
  *
@@ -22,11 +24,7 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	);
 
 
-	/**
-	 * @param  Nette\PhpGenerator\ClassType $class
-	 * @return void
-	 */
-	public function afterCompile(Nette\PhpGenerator\ClassType $class)
+	public function afterCompile(Nette\PhpGenerator\ClassType $class): void
 	{
 		$config = $this->getConfig($this->defaults);
 
@@ -41,15 +39,10 @@ class HttpAuthExtension extends Nette\DI\CompilerExtension
 	}
 
 
-	/**
-	 * @param  Nette\Configurator $configurator
-	 * @param  string $prefix
-	 * @return void
-	 */
-	public static function register(Nette\Configurator $configurator, $prefix = 'httpAuth')
+	public static function register(Nette\Configurator $configurator, string $prefix = 'httpAuth'): void
 	{
 		$class = __CLASS__;
-		$configurator->onCompile[] = function ($configurator, $compiler) use ($prefix, $class) {
+		$configurator->onCompile[] = static function ($configurator, $compiler) use ($prefix, $class): void {
 			$compiler->addExtension($prefix, new $class);
 		};
 	}
