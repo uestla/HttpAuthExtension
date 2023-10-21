@@ -40,7 +40,7 @@ final class HttpAuthExtension extends CompilerExtension
 		$config = $this->config;
 
 		if (isset($config->username, $config->password, $config->title)) {
-            $initialize = $class->getMethod('initialize');
+			$initialize = $class->getMethod('initialize');
 
 			$initialize->addBody('$auth = new HttpAuthExtension\HttpAuthenticator( $this->getByType(\'Nette\Http\IResponse\'), ?, ?, ? );',
 					[$config->username, $config->password, $config->title]);
